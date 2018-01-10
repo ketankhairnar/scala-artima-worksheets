@@ -118,3 +118,40 @@ class Rational6(n: Int, d: Int) {
     if (this.lessThan(that)) that else this
 
 }
+
+// Auxillary Constructor
+// Self references
+// ------------------------------------------------
+class Rational7(n: Int, d: Int) {
+  require(d != 0)
+  val numer: Int = n
+  val denom: Int = d
+
+  // Auxillary constructor
+  def this(n:Int) = this(n,1)
+
+  override def toString = numer + "/" + denom
+  def add(that: Rational7): Rational7 =
+    new Rational7(
+      numer * that.denom + that.numer * denom,
+      denom * that.denom
+    )
+
+  // Note that usage of `this` is optional here
+  def lessThan(that: Rational7) =
+    this.numer * that.denom < that.numer * this.denom
+
+  // whereas usage of `this` is needed in else clause
+  // if clause usage of `this` is still optional
+  def max(that: Rational7) =
+    if (this.lessThan(that)) that else this
+
+}
+val y = new Rational7(3)
+
+// Notes :
+// Primary constructor is the entry point to class
+// auxillary constructor either invokes primary constructor or
+// another auxillary constructor as its first action
+// In a Scala class, only the primary constructor can invoke a superclass constructor
+// In java any constructor can make call to superclass constructor
