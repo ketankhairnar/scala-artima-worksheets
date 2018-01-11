@@ -155,3 +155,79 @@ val y = new Rational7(3)
 // another auxillary constructor as its first action
 // In a Scala class, only the primary constructor can invoke a superclass constructor
 // In java any constructor can make call to superclass constructor
+
+// Private Fields and Methods
+// ------------------------------------------------
+
+new Rational7(66, 42)
+// above should be 11/7
+
+// Note : Below code adds private field and method which can not be accessed
+// from outside
+class Rational8(n: Int, d: Int) {
+
+  require(d != 0)
+
+  // next 3 lines are called as initializer code and gets
+  // executed as part of the constructor
+  private val g = gcd(n.abs, d.abs)
+  val numer = n / g
+  val denom = d / g
+
+  def this(n: Int) = this(n, 1)
+
+  def add(that: Rational8): Rational8 =
+    new Rational8(
+      numer * that.denom + that.numer * denom,
+      denom * that.denom
+    )
+
+  override def toString = numer + "/" + denom
+
+  private def gcd(a: Int, b: Int): Int =
+    if (b == 0) a else gcd(b, a % b)
+}
+
+new Rational8(66, 42) // -->  gives 11/7 now
+
+// Operator
+
+val oneHalfNew = new Rational8(1, 2)
+val twoThirdNew = new Rational8(2, 3)
+// we should be able to do below
+// oneHalfNew + twoThirdNew
+oneHalfNew  add twoThirdNew
+
+// Notes : + and * are operator methods implemented
+class Rational9(n: Int, d: Int) {
+
+  require(d != 0)
+
+  private val g = gcd(n.abs, d.abs)
+  val numer = n / g
+  val denom = d / g
+
+  def this(n: Int) = this(n, 1)
+
+  def + (that: Rational9): Rational9 =
+    new Rational9(
+      numer * that.denom + that.numer * denom,
+      denom * that.denom
+    )
+
+  def * (that: Rational9): Rational9 =
+    new Rational9(numer * that.numer, denom * that.denom)
+
+  override def toString = numer + "/" + denom
+
+  private def gcd(a: Int, b: Int): Int =
+    if (b == 0) a else gcd(b, a % b)
+}
+
+val oneHalf2 = new Rational9(1, 2)
+val twoThird2 = new Rational9(2, 3)
+oneHalf2 + twoThird2
+oneHalf2 * twoThird2
+// Note that below maintains operator precedence as well
+oneHalf2 + twoThird2*twoThird2
+
