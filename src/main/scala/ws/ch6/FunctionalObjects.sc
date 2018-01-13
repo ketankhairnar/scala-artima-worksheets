@@ -191,7 +191,7 @@ class Rational8(n: Int, d: Int) {
 new Rational8(66, 42) // -->  gives 11/7 now
 
 // Operator
-
+// ------------------------------------------------
 val oneHalfNew = new Rational8(1, 2)
 val twoThirdNew = new Rational8(2, 3)
 // we should be able to do below
@@ -230,4 +230,10 @@ oneHalf2 + twoThird2
 oneHalf2 * twoThird2
 // Note that below maintains operator precedence as well
 oneHalf2 + twoThird2*twoThird2
+
+// identifiers in scala
+// ------------------------------------------------
+
+// An alphanumeric identifier starts with a letter or underscore,
+// which can be followed by further letters, digits, or underscores.
 
