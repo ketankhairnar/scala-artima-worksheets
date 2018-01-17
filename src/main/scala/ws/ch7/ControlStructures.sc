@@ -29,11 +29,12 @@ def gcdLoop(x: Long, y: Long): Long = {
 // While loop has a condition and a body, and the body is
 // executed over and over as long as the condition holds true
 
-var line = ""
-do {
-  line = readLine()
-  println("Read: " + line)
-} while (line != "")
+//var line = ""
+//do {
+//  line = scala.io.StdIn.readLine()
+//  println("Read: " + line)
+//} while (line != "")
+
 // Note : The while and do-while constructs are called "loops," not expressions,
 // because they don't result in an
 // interesting value. The type of the result is Unit
