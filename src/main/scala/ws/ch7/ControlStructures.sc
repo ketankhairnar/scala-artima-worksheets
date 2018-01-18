@@ -68,7 +68,6 @@ for (file <- filesHere if file.getName.endsWith(".scala"))
   println(file)
 
 // One can include more filters if needed
-
 for (
   file <- filesHere
   if file.isFile
@@ -89,3 +88,90 @@ def grep(pattern: String) =
   ) println(file + ": " + line.trim)
 
 grep(".*gcd.*")
+
+// 3.4 Mid-stream variable bindings
+def grepUpdated(pattern: String) =
+  for {
+    file <- filesHere
+    if file.getName.endsWith(".scala")
+    line <- fileLines(file)
+    trimmed = line.trim
+    if trimmed.matches(pattern)
+  } println(file + ": " + trimmed)
+
+grepUpdated(".*gcd.*")
+
+// 3.5 producing new collection
+
+def scalaFiles =
+  for {
+    file <- filesHere
+    if file.getName.endsWith(".scala")
+  } yield file
+
+// Be careful, by the way, where you place the yield keyword. The syntax of a for-yield expression is like this:
+// for clauses yield body
+// below code example is wrong one
+
+// for (file <- filesHere if file.getName.endsWith(".scala")) {
+// yield file  // Syntax error!
+// }
+
+// complete example with all use cases discussed earlier as below
+// Transforming an Array[File] to Array[Int] with a for.
+val forLineLengths =
+  for {
+    file <- filesHere
+    if file.getName.endsWith(".scala")
+    line <- fileLines(file)
+    trimmed = line.trim
+    if trimmed.matches(".*for.*")
+  } yield trimmed.length
+
+// Throwing Exceptions
+
+var n = 54
+
+val half =
+  if (n % 2 == 0)
+    n / 2
+  else
+    throw new RuntimeException("n must be even")
+
+// Technically, an exception throw has type Nothing.
+// One branch of an if computes a value, while the other throws an exception
+// and computes Nothing. The type of the whole if expression is then the type of
+// that branch which does compute something.
+
+// Catching Exceptions
+
+import java.io.FileReader
+import java.io.FileNotFoundException
+import java.io.IOException
+
+try {
+  val f = new FileReader("input.txt")
+  // Use and close file
+} catch {
+  case ex: FileNotFoundException => // Handle missing file
+  case ex: IOException => // Handle other I/O error
+}
+// In this example, if the exception is of type FileNotFoundException, the first clause
+// will execute. If it is of type IOException, the second clause will execute.
+// If the exception is of neither type, the try-catch will terminate and the exception will propagate further.
+
+// Unlike java in scala we don't have to throw checked exceptions
+
+
+// The finally clause
+import java.io.FileReader
+
+val file = new FileReader("input.txt")
+try {
+  // Use the file
+} finally {
+  file.close()  // Be sure to close the file
+}
+
+// You can wrap an expression with a finally clause if you want to cause some code
+// to execute no matter how the expression terminates.
