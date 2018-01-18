@@ -234,8 +234,92 @@ oneHalf2 + twoThird2*twoThird2
 // identifiers in scala
 // ------------------------------------------------
 
-// An alphanumeric identifier starts with a letter or underscore,
+//1.  An alphanumeric identifier starts with a letter or underscore,
 // which can be followed by further letters, digits, or underscores.
+
+// operator identifier
+// Operator identifier internal presentation
+// :-> $colon$minus$greater - later to be used when used from java
+
+
+// constant identifier
+// convention - in java X_OFFSET but in scala XOffset
+
+//A mixed identifier consists of an alphanumeric identifier,
+// which is followed by an underscore and an operator identifier.
+// For example, unary_+ used as a method name defines a unary + operator
+
+// A literal identifier is an arbitrary string enclosed in backticks
+// e.g. `<cinit>` Thread.`yield`() - yield is reserved keyword in scala
+
+// Method overloading
+
+class Rational10(n: Int, d: Int) {
+
+  require(d != 0)
+
+  private val g = gcd(n.abs, d.abs)
+  val numer = n / g
+  val denom = d / g
+
+  def this(n: Int) = this(n, 1)
+
+  def + (that: Rational10): Rational10 =
+    new Rational10(
+      numer * that.denom + that.numer * denom,
+      denom * that.denom
+    )
+
+  def + (i: Int): Rational10 =
+    new Rational10(numer + i * denom, denom)
+
+  def - (that: Rational10): Rational10 =
+    new Rational10(
+      numer * that.denom - that.numer * denom,
+      denom * that.denom
+    )
+
+  def - (i: Int): Rational10 =
+    new Rational10(numer - i * denom, denom)
+
+  def * (that: Rational10): Rational10 =
+    new Rational10(numer * that.numer, denom * that.denom)
+
+  def * (i: Int): Rational10 =
+    new Rational10(numer * i, denom)
+
+  def / (that: Rational10): Rational10 =
+    new Rational10(numer * that.denom, denom * that.numer)
+
+  def / (i: Int): Rational10 =
+    new Rational10(numer, denom * i)
+
+  override def toString = numer + "/" + denom
+
+  private def gcd(a: Int, b: Int): Int =
+    if (b == 0) a else gcd(b, a % b)
+}
+// Above example allows +,-,*, / operations with Int type as well
+// so that r * 2 is now possible which we used to write as r * new Rational(2)
+
+val x = new Rational10(2, 3)
+x*new Rational10(3,1)
+x*3
+x*x
+x+3
+
+// Implicit conversions
+// Note that above example doesn't allow us to do 2*x however
+
+// By adding  an implicit conversion that automatically converts
+// integers to rational numbers when needed.
+
+implicit def intToRational(x: Int) = new Rational10(x)
+
+2*x
+// Note : For an implicit conversion to work, it needs to be in scope.
+
+
 
 
 
