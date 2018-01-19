@@ -175,3 +175,16 @@ try {
 
 // You can wrap an expression with a finally clause if you want to cause some code
 // to execute no matter how the expression terminates.
+
+
+
+// As in Java, if a finally clause includes an explicit return statement,
+// or throws an exception, that return value or exception will "overrule"
+// any previous one that originated in the try block or one of its catch clauses.
+def f(): Int = try return 1 finally return 2
+
+// f returns 2
+
+def g(): Int = try 1 finally 2
+
+// whereas g returns 1
