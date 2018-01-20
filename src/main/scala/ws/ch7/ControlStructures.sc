@@ -151,11 +151,13 @@ import java.io.IOException
 
 try {
   val f = new FileReader("input.txt")
+  println()
   // Use and close file
 } catch {
   case ex: FileNotFoundException => // Handle missing file
   case ex: IOException => // Handle other I/O error
 }
+
 // In this example, if the exception is of type FileNotFoundException, the first clause
 // will execute. If it is of type IOException, the second clause will execute.
 // If the exception is of neither type, the try-catch will terminate and the exception will propagate further.
@@ -188,3 +190,109 @@ def f(): Int = try return 1 finally return 2
 def g(): Int = try 1 finally 2
 
 // whereas g returns 1
+
+
+// Life without break and continue
+//--------------------------------------
+
+var i = 0
+var foundIt = false
+
+while (i < args.length && !foundIt) {
+  if (!args(i).startsWith("-")) {
+    if (args(i).endsWith(".scala"))
+      foundIt = true
+  }
+  i = i + 1
+}
+
+//In above example `if` helps for continue scenarios
+// whereas foundIt var is used as break logic
+
+
+// Scala way of break
+//--------------------------------------
+
+
+import scala.util.control.Breaks._
+import java.io._
+
+val in = new BufferedReader(new InputStreamReader(System.in))
+
+breakable {
+  while (true) {
+    println("? ")
+    if (in.readLine() == "") break
+  }
+}
+
+// The Breaks class implements break by throwing an exception that is
+// caught by an enclosing application of the breakable method.
+// Therefore, the call to break does not need to be in the same method
+// as the call to breakable.
+
+
+// VARIABLE SCOPE
+//--------------------------------------
+
+def printMultiTable() = {
+
+  var i = 1
+  // only i in scope here
+
+  while (i <= 10) {
+
+    var j = 1
+    // both i and j in scope here
+
+    while (j <= 10) {
+
+      val prod = (i * j).toString
+      // i, j, and prod in scope here
+
+      var k = prod.length
+      // i, j, prod, and k in scope here
+
+      while (k < 4) {
+        print(" ")
+        k += 1
+      }
+
+      print(prod)
+      j += 1
+    }
+
+    // i and j still in scope; prod and k out of scope
+
+    println()
+    i += 1
+  }
+
+  // i still in scope; j, prod, and k out of scope
+}
+
+// REFACTORING IMPERATIVE-STYLE CODE
+//--------------------------------------
+
+// last example re-written in functional style
+
+// Returns a row as a sequence
+def makeRowSeq(row: Int) =
+  for (col <- 1 to 10) yield {
+    val prod = (row * col).toString
+    val padding = " " * (4 - prod.length)
+    padding + prod
+  }
+
+// Returns a row as a string
+def makeRow(row: Int) = makeRowSeq(row).mkString
+
+// Returns table as a string with one row per line
+def multiTable() = {
+
+  val tableSeq = // a sequence of row strings
+    for (row <- 1 to 10)
+      yield makeRow(row)
+
+  tableSeq.mkString("\n")
+}
