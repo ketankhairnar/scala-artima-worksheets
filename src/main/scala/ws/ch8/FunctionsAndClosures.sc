@@ -76,3 +76,42 @@ someNumbers.filter(_ > 0)
 someNumbers.foreach(println _)
 // Thus, the underscore in this case is not a placeholder for a single parameter.
 // It is a placeholder for an entire parameter list.
+
+// When you use an underscore in this way, you are writing a partially applied function.
+
+
+// below is full function with all arguments
+def sum(a: Int, b: Int, c: Int) = a + b + c
+sum(1,2,3)
+
+val a = sum _
+
+// Given above code, the Scala compiler instantiates a function value that takes the three integer
+// parameters missing from the partially applied function expression,
+// sum _, and assigns a reference to that new function value to the variable a.
+// When you apply three arguments to this new function value,
+// it will turn around and invoke sum, passing in those same three arguments:
+
+a(1, 2, 3)
+
+// you can also express a partially applied function by supplying only some of
+// the required arguments.
+
+val b = sum(1, _: Int, 3)
+
+b(2)
+
+// If you are writing a partially applied function expression in which you leave off
+// all parameters, such as println _ or sum _, you can express it more concisely by leaving off the underscore if a
+// function is required at that point in the code.
+
+someNumbers.foreach(println _)
+// could be written as
+someNumbers.foreach(println)
+
+
+// CLOSURES
+//--------------------------------------
+
+
+
