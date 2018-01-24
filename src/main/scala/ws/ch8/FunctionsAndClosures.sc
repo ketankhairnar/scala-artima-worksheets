@@ -144,4 +144,23 @@ someNumbers1.foreach(sum2 +=  _)
 
 sum2
 
+// Above example uses a roundabout way to sum the numbers in a List.
+// Variable sum is in a surrounding scope from the function literal sum += _,
+// which adds numbers to sum. Even though it is the closure modifying sum at runtime,
+// the resulting total, -11, is still visible outside the closure.
+
+
+// Each time below function is called it will create a new closure.
+// Each closure will access the more variable that was active when the closure was created.
+def makeIncreaser(more: Int) = (x: Int) => x + more
+
+val inc1 = makeIncreaser(1)
+
+val inc9999 = makeIncreaser(9999)
+
+inc1(1)
+
+inc9999(1)
+
+
 
