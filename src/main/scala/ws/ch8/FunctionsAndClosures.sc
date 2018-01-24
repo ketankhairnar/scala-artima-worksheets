@@ -114,4 +114,34 @@ someNumbers.foreach(println)
 //--------------------------------------
 
 
+var more = 1
+
+val addMore = (x: Int) => x + more
+
+addMore(11)
+
+// The function addMore is a closure because it does not only depend on its parameters,
+// but also on a variable that is declared outside of its own lexical scope (namely more).
+
+// now if we change value of more to something else
+
+more = 35
+
+addMore(11)
+
+//Scala's closures capture variables themselves, not the value to which variables refer.
+// As the previous example shows, the closure created for (x: Int) => x + more
+// sees the change to more made outside the closure.
+//
+// The same is true in the opposite direction. Changes made by a closure to a captured
+// variable are visible outside the closure.
+
+val someNumbers1 = List(-11, -10, -5, 0, 5, 10)
+
+var sum2 = 0
+
+someNumbers1.foreach(sum2 +=  _)
+
+sum2
+
 
